@@ -3,12 +3,18 @@ using UnityEngine.SceneManagement;
 
 public class Rocket : MonoBehaviour
 {
-    //todo fix lighting bug
+    
     [SerializeField] float rcThrust = 100f;
     [SerializeField] float mainThrust = 100f;
+
     [SerializeField] AudioClip mainEngine;
     [SerializeField] AudioClip Success;
     [SerializeField] AudioClip Dead;
+
+    [SerializeField] ParticleSystem mainEngineParticles;
+    [SerializeField] ParticleSystem SuccessParticles;
+    [SerializeField] ParticleSystem DeadParticles;
+
 
     Rigidbody rigidBody;
     AudioSource audioSource;
@@ -26,7 +32,7 @@ public class Rocket : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {   //todo stop sound after death
+    {  
         if (state == State.Alive)
         {
             RespondToThrustInput();
@@ -62,6 +68,7 @@ public class Rocket : MonoBehaviour
         state = State.Transcending;
         audioSource.Stop();
         audioSource.PlayOneShot(Success);
+        SuccessParticles.Play();
         Invoke("LoadNextScene", 1f); //paramerterized time
     }
 
@@ -71,6 +78,8 @@ public class Rocket : MonoBehaviour
         state = State.Dying;
         audioSource.Stop();
         audioSource.PlayOneShot(Dead);
+        DeadParticles.Play();
+        mainEngineParticles.Stop();
         Invoke("LoadFirstLevel", 1f);
     }
 
@@ -95,7 +104,9 @@ public class Rocket : MonoBehaviour
         else
         {
             audioSource.Stop();
+            mainEngineParticles.Stop();
         }
+       
     }
 
     private void ApplyThrust()
@@ -106,6 +117,7 @@ public class Rocket : MonoBehaviour
         {
             audioSource.PlayOneShot(mainEngine);
         }
+        mainEngineParticles.Play();
     }
 
     private void RespondToRotateInput()
