@@ -112,7 +112,7 @@ public class Rocket : MonoBehaviour
 
     private void ApplyThrust()
     {
-        rigidBody.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);//if angeled, always thrusts towards the top
+        rigidBody.AddRelativeForce(Vector3.up * mainThrust );//if angeled, always thrusts towards the top
 
         if (!audioSource.isPlaying)
         {
