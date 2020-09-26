@@ -1,2 +1,2 @@
 # Unity Game Development
-Various small Gaming Projects developed in Unity
+Various small Gaming Projects developed in Unity and C#
