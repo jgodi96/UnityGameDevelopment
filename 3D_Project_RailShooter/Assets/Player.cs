@@ -9,6 +9,15 @@ public class Player : MonoBehaviour
     [Tooltip("In ms^-1")][SerializeField] float speed = 20f;
     [Tooltip("In m")] [SerializeField] float xRange = 5f;
     [Tooltip("In m")] [SerializeField] float yRange = 3f;
+
+
+    [SerializeField] float positionPitchFactor = -5f;
+    [SerializeField] float controlPitchFactor = -30f;
+    [SerializeField] float positionYawFactor = -5f;
+    [SerializeField] float controlRollFactor = -5f;
+
+    float xThrow;
+    float yThrow;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,14 +33,22 @@ public class Player : MonoBehaviour
 
     private void ProcessRotation()
     {
-        //todo
+        float pitchDueToPosition = transform.localPosition.y * positionPitchFactor;
+        float pitchDueToControlThrow =  yThrow * controlPitchFactor;
+        float pitch = pitchDueToPosition + pitchDueToControlThrow;
+
+        float yaw = transform.localPosition.x * positionPitchFactor;
+
+        float roll = xThrow * controlRollFactor;
+        transform.localRotation = Quaternion.Euler(pitch,yaw,roll);
+
     }
 
     private void ProcessTranslation()
     {
-        //print(horizontalThrow);
-        float xThrow = CrossPlatformInputManager.GetAxis("Horizontal");
-        float yThrow = CrossPlatformInputManager.GetAxis("Vertical");
+        //print(xThrow);
+        xThrow = CrossPlatformInputManager.GetAxis("Horizontal");
+        yThrow = CrossPlatformInputManager.GetAxis("Vertical");
 
         float xOffset = xThrow * speed * Time.deltaTime;
         float yOffset = yThrow * speed * Time.deltaTime;
